@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <title>Care Connect</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./style.css">
+        <link rel="icon" type="image/x-icon" href="./assets/img/logo.png">
+    </head>
+    <body>
+        <!-- Splash -->
+        <div id="splashDiv">
+            <img src="./assets/img/logo.png" id="splashImg">
+            <b id="splashText">Loading</b>
+        </div>
+
+        <!-- Snackbar -->
+        <div id="snackbar"></div>
+
+        <!-- Auth -->
+        <div id="mainAuth" class="authScrn">
+            <img src="assets/img/logo.png" id="authLogo">
+            <div id="authTitle">Care Connect</div>
+            <div id="authSubTitle">Bridging Communication Gaps</div><br>
+            <div id="authWarning">Parents/Caregivers are supposed to be registering for the child</div>
+            <div class="auth-container">
+                <div class="button-container">
+                    <button id="authLogin" class="auth-button">Sign In</button>
+                    <button id="authSignUp" class="auth-button">Sign Up</button>
+                </div>
+            </div>
+        </div>
+        <div id="loginScrn" class="authScrn" hidden>
+            <div class="backBtn" onclick="document.getElementById('loginScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
+            <b class="authHead">Login</b><br>
+            <form id="loginForm" class="authForm">
+                <label for="email"><b>Email</b></label><br>
+                <input id="loginEmail" type="email" placeholder="Enter your email" name="email" required><br>
+                <label for="password"><b>Password</b></label><br>
+                <input id="loginPassword" type="password" placeholder="Enter your password" name="password" required><br>
+                <button id="loginBtn" type="submit">Login</button>
+            </form>
+            <div class="loginOthers">
+                OR<br><br>
+                <div id="googleAuth" class="authBtn" style="background-color: #4285F4;">
+                    <img src="assets/img/google.png" alt="Google Icon">
+                    <span>Sign in with Google</span>
+                </div>
+            </div>
+        </div>
+        <div id="signUpScrn" class="authScrn" hidden>
+            <div class="backBtn" onclick="document.getElementById('signUpScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
+            <b class="authHead">Sign Up</b><br>
+            <form id="signUpForm" class="authForm">
+                <label for="username"><b>Username</b></label><br>
+                <input id="signUpUsername" type="text" placeholder="Enter your username" name="username" required><br>
+                <label for="email"><b>Email</b></label><br>
+                <input id="signUpEmail" type="email" placeholder="Enter your email" name="email" required><br>
+                <label for="password"><b>Password</b></label><br>
+                <input id="signUpPassword" type="password" placeholder="Enter your password" name="password" required><br>
+                <label for="confirmPassword"><b>Confirm Password</b></label><br>
+                <input id="signUpConfirmPassword" type="password" placeholder="Enter your password again" name="confirmPassword" required><br>
+                <label for="accountType"><b>Account Type</b></label><br>
+                <select id="signUpAccountType" name="accountType" required>
+                    <option hidden selected value="">Select One</option>
+                    <option>Parent</option>
+                    <option>Child</option>
+                </select>
+                <button id="signUpBtn" type="submit">Sign Up</button>
+            </form>
+            <div class="loginOthers">
+                OR<br><br>
+                <div id="googleAuth2" class="authBtn" style="background-color: #4285F4;">
+                    <img src="assets/img/google.png" alt="Google Icon">
+                    <span>Sign up with Google</span>
+                </div>
+            </div>
+        </div>
+        <div id="emailVerify"><b>Please check your email for the verification link.<br>Refresh this page after verification.</b><br><button id="signOut2">Sign Out</button></div>
+        <div id="googleSignUp" class="authScrn" hidden>
+            <b class="authHead">Google</b><br>
+            <form id="googleForm" class="authForm">
+                <label for="username"><b>Username</b></label><br>
+                <input id="googleUsername" type="text" placeholder="Enter your username" name="username" required><br>
+                <label for="googleAccountType"><b>Account Type</b></label><br>
+                <select id="googleAccountType" name="googleAccountType" required>
+                    <option hidden selected value="">Select One</option>
+                    <option>Parent</option>
+                    <option>Child</option>
+                </select>
+                <button id="googleBtn" type="submit">Get Started</button>
+            </form>
+        </div>
+
+        <!-- Nav -->
+        <div id="navDiv"></div>
+        
+        <!-- Home Screen -->
+        <div id="homeScrn" class="scrn" hidden>
+            <div class="headings">
+                <div id="menu" class="menu"></div>
+                <b class="title">Home</b>
+            </div>
+            <div id="homeDiv">
+                <button id="pictorial" class="homeMenu"><b class="homeLabel">Pictorial</b></button>
+                <button id="text" class="homeMenu"><b class="homeLabel">Text</b></button>
+                <button id="reminder" class="homeMenu"><b class="homeLabel">Reminder</b></button>
+                <button id="games" class="homeMenu"><b class="homeLabel">Games</b></button>
+                <button id="mood" class="homeMenu"><b class="homeLabel">Mood</b></button>
+            </div>
+        </div>
+
+        <!-- Pictorial Screen -->
+        <div id="pictorialScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Pictorial</b>
+            </div>
+        </div>
+
+        <!-- Text Screen -->
+        <div id="textScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Text</b>
+            </div>
+        </div>
+        
+        <!-- Reminder Screen -->
+        <div id="reminderScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Reminder</b>
+            </div>
+        </div>
+        
+        <!-- Games Screen -->
+        <div id="gamesScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Games</b>
+            </div>
+        </div>
+        
+        <!-- Mood Screen -->
+        <div id="moodScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Mood</b>
+            </div>
+        </div>
+        
+        <!-- Emergency Screen -->
+        <div id="emergencyScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Emergency</b>
+            </div>
+        </div>
+    </body>
+    <script src="code.js" type="module"></script>
+</html>
