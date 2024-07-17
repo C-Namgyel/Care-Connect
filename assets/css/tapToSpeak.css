@@ -1,0 +1,120 @@
+@media (max-width: 600px) {
+    .scrnDiv {
+        position: absolute;
+        top: 5%;
+        left: 10%;
+        width: 80%;
+        height: 95%;
+        overflow: auto;
+        overflow-wrap: break-word;
+        text-align: center;
+    }
+    .scrnMenu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30%;
+        padding: 2.5%;
+        margin-left: 13.333%;
+        margin-bottom: 15%;
+        background-color: white;
+        border-style: solid;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 2px;
+        aspect-ratio: 1/1;
+        text-align: center;
+        float: left;
+    }
+    /* Tap to Speak T2S */
+    #tapToSpeakT2SImg {
+        width: 30%;
+        aspect-ratio: 1/1;
+        border-style: solid;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 1px;
+        display: inline-block;
+        background-color: white;
+        margin-bottom: 15px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    #tapToSpeakT2SInpBtn {
+        width: 50%;
+        margin-bottom: 15px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0074D9;
+        color: #ffffff;
+        border-radius: 5px;
+    }
+    #tapToSpeakT2SName {
+        width: 50%;
+        margin-bottom: 15px;
+        height: auto;
+        border: 3px solid #cccccc;
+        padding: 5px;
+    }
+    #tapToSpeakT2SSelect, #tapToSpeakT2SCaterogy {
+        width: 50%;
+        margin-bottom: 15px;
+        padding: 10px 20px;
+        background-color: #ffffff;
+        border: 1px solid #caced1;
+        border-radius: 5px;
+        color: #000000;
+    }
+    #tapToSpeakT2SMessage {
+        width: 100%;
+        margin-bottom: 15px;
+        height: 50px;
+        border: 3px solid #cccccc;
+        padding: 5px;
+    }
+    /* tapToSpeak Audio */
+    #tapToSpeakAudioImg {
+        width: 30%;
+        aspect-ratio: 1/1;
+        border-style: solid;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 1px;
+        display: inline-block;
+        background-color: white;
+        margin-bottom: 15px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    #tapToSpeakAudioInpBtn, #tapToSpeakAudioMessageBtn {
+        width: 50%;
+        margin-bottom: 15px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0074D9;
+        color: #ffffff;
+        border-radius: 5px;
+    }
+    #tapToSpeakAudioName {
+        width: 50%;
+        margin-bottom: 15px;
+        height: auto;
+        border: 3px solid #cccccc;
+        padding: 5px;
+    }
+    #tapToSpeakAudioSelect, #tapToSpeakAudioCaterogy {
+        width: 50%;
+        margin-bottom: 15px;
+        padding: 10px 20px;
+        background-color: #ffffff;
+        border: 1px solid #caced1;
+        border-radius: 5px;
+        color: #000000;
+    }
+    #tapToSpeakAudioPreview {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}

@@ -2,7 +2,13 @@
     <head>
         <title>Care Connect</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./assets/css/general.css">
+        <link rel="stylesheet" href="./assets/css/nav.css">
+        <link rel="stylesheet" href="./assets/css/navFeatures.css">
+        <link rel="stylesheet" href="./assets/css/basic.css">
+        <link rel="stylesheet" href="./assets/css/auth.css">
+        <link rel="stylesheet" href="./assets/css/home.css">
+        <link rel="stylesheet" href="./assets/css/tapToSpeak.css">
         <link rel="icon" type="image/x-icon" href="./assets/img/logo.png">
     </head>
     <body>
@@ -15,6 +21,22 @@
         <!-- Snackbar -->
         <div id="snackbar"></div>
 
+        <!-- Nav -->
+        <div id="barrier" hidden></div>
+        <div id="navDiv">
+            <div id="navHead">
+                <button id="navClose" onclick="closeNav();">x</button>
+                <div id="navLogo"></div>
+                <b id="navName"></b><br>
+                <a id="navEmail"></a><br>
+                <a id="navUID"></a><br>
+            </div>
+            <div id="navMenu">
+                <button id="connect" class="navButtons">Connect with child</button><br>
+                <button id="signOut" class="navButtons">Sign Out</button>
+            </div>
+        </div>
+
         <!-- Auth -->
         <div id="mainAuth" class="authScrn">
             <img src="assets/img/logo.png" id="authLogo">
@@ -23,13 +45,13 @@
             <div id="authWarning">Parents/Caregivers are supposed to be registering for the child</div>
             <div class="auth-container">
                 <div class="button-container">
-                    <button id="authLogin" class="auth-button">Sign In</button>
-                    <button id="authSignUp" class="auth-button">Sign Up</button>
+                    <button id="authLogin" class="buttons">Sign In</button>
+                    <button id="authSignUp" class="buttons">Sign Up</button>
                 </div>
             </div>
         </div>
         <div id="loginScrn" class="authScrn" hidden>
-            <div class="backBtn" onclick="document.getElementById('loginScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
+            <div class="authBackBtn" onclick="document.getElementById('loginScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
             <b class="authHead">Login</b><br>
             <form id="loginForm" class="authForm">
                 <label for="email"><b>Email</b></label><br>
@@ -40,14 +62,14 @@
             </form>
             <div class="loginOthers">
                 OR<br><br>
-                <div id="googleAuth" class="authBtn" style="background-color: #4285F4;">
+                <div id="googleAuth" class="authBtn">
                     <img src="assets/img/google.png" alt="Google Icon">
                     <span>Sign in with Google</span>
                 </div>
             </div>
         </div>
         <div id="signUpScrn" class="authScrn" hidden>
-            <div class="backBtn" onclick="document.getElementById('signUpScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
+            <div class="authBackBtn" onclick="document.getElementById('signUpScrn').hidden = true; document.getElementById('mainAuth').hidden = false;"></div>
             <b class="authHead">Sign Up</b><br>
             <form id="signUpForm" class="authForm">
                 <label for="username"><b>Username</b></label><br>
@@ -68,7 +90,7 @@
             </form>
             <div class="loginOthers">
                 OR<br><br>
-                <div id="googleAuth2" class="authBtn" style="background-color: #4285F4;">
+                <div id="googleAuth2" class="authBtn">
                     <img src="assets/img/google.png" alt="Google Icon">
                     <span>Sign up with Google</span>
                 </div>
@@ -89,9 +111,6 @@
                 <button id="googleBtn" type="submit">Get Started</button>
             </form>
         </div>
-
-        <!-- Nav -->
-        <div id="navDiv"></div>
         
         <!-- Home Screen -->
         <div id="homeScrn" class="scrn" hidden>
@@ -100,27 +119,84 @@
                 <b class="title">Home</b>
             </div>
             <div id="homeDiv">
-                <button id="pictorial" class="homeMenu"><b class="homeLabel">Pictorial</b></button>
-                <button id="text" class="homeMenu"><b class="homeLabel">Text</b></button>
+                <button id="tapToSpeak" class="homeMenu"><b class="homeLabel">Tap to Speak</b></button>
                 <button id="reminder" class="homeMenu"><b class="homeLabel">Reminder</b></button>
                 <button id="games" class="homeMenu"><b class="homeLabel">Games</b></button>
                 <button id="mood" class="homeMenu"><b class="homeLabel">Mood</b></button>
+                <button id="typeToSpeak" class="homeMenu"><b class="homeLabel">Type to Speak</b></button>
+                <button id="emergency" class="homeMenu"><b class="homeLabel">Emergency</b></button>
             </div>
         </div>
 
-        <!-- Pictorial Screen -->
-        <div id="pictorialScrn" class="scrn" hidden>
+        <!-- Connect Screen -->
+        <div id="connectScrn" class="scrn" hidden>
             <div class="headings">
                 <div class="homeBtn"></div>
-                <b class="title">Pictorial</b>
+                <b class="title">Connect</b>
+            </div>
+            <div class="scrnDiv">
+                <input id="connectUID" placeholder="Child's UID">
+                <button id="connectBtn" class="buttons">Connect</button>
             </div>
         </div>
 
-        <!-- Text Screen -->
-        <div id="textScrn" class="scrn" hidden>
+        <!-- Tap to Speak Screen -->
+        <div id="tapToSpeakScrn" class="scrn" hidden>
             <div class="headings">
                 <div class="homeBtn"></div>
-                <b class="title">Text</b>
+                <b class="title">Tap to Speak</b>
+            </div>
+            <div id="tapToSpeakAdd" class="addBtns"></div>
+        </div>
+        <div id="tapToSpeakT2SAddScrn" class="scrn" hidden>
+            <div class="headings">
+                <div id="tapToSpeakT2SBack" class="backBtn"></div>
+                <b class="title">Tap to Speak</b>
+            </div>
+            <div class="scrnDiv">
+                <div id="tapToSpeakT2SImg"></div><br>
+                <button id="tapToSpeakT2SInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakT2SInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakT2SInpText">Insert Image</a></button><br>
+                <input id="tapToSpeakT2SName" placeholder="Name">
+                <select id="tapToSpeakT2SCaterogy">
+                    <option value="" hidden selected>Category</option>
+                    <option>Foods</option>
+                    <option>Fruits</option>
+                    <option>People</option>
+                    <option>Place</option>
+                    <option>Manage Category</option>
+                </select>
+                <select id="tapToSpeakT2SSelect">
+                    <option selected>Text to Speech</option>
+                    <option>Audio</option>
+                </select><br>
+                <textarea id="tapToSpeakT2SMessage" resize="false" placeholder="Type the message of the picture"></textarea>
+                <button id="tapToSpeakT2SBtn" class="buttons">Add</button>
+            </div>
+        </div>
+        <div id="tapToSpeakAudioAddScrn" class="scrn" hidden>
+            <div class="headings">
+                <div id="tapToSpeakAudioBack" class="backBtn"></div>
+                <b class="title">Tap to Speak</b>
+            </div>
+            <div class="scrnDiv">
+                <div id="tapToSpeakAudioImg"></div><br>
+                <button id="tapToSpeakAudioInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakAudioInpText">Insert Image</a></button><br>
+                <input id="tapToSpeakAudioName" placeholder="Name">
+                <select id="tapToSpeakAudioCaterogy">
+                    <option value="" hidden selected>Category</option>
+                    <option>Foods</option>
+                    <option>Fruits</option>
+                    <option>People</option>
+                    <option>Place</option>
+                    <option>Manage Category</option>
+                </select>
+                <select id="tapToSpeakAudioSelect">
+                    <option>Text to Speech</option>
+                    <option selected>Audio</option>
+                </select><br>
+                <button id="tapToSpeakAudioMessageBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioMessage" type="file" style="display: none;" accept="audio/*"><a id="tapToSpeakAudioMessageText">Upload Audio</a></button><br>
+                <audio id="tapToSpeakAudioPreview" controls></audio>
+                <button id="tapToSpeakAudioBtn" class="buttons">Add</button>
             </div>
         </div>
         
@@ -147,6 +223,16 @@
                 <b class="title">Mood</b>
             </div>
         </div>
+
+        <!-- Type to Speak Screen -->
+        <div id="typeToSpeakScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Type to Speak</b>
+            </div>
+            <textarea id="typeToSpeakText" placeholder="Type the message"></textarea><br>
+            <button id="typeToSpeakBtn">Speak</button>
+        </div>
         
         <!-- Emergency Screen -->
         <div id="emergencyScrn" class="scrn" hidden>
@@ -156,5 +242,6 @@
             </div>
         </div>
     </body>
-    <script src="code.js" type="module"></script>
+    <script src="./assets/js/global.js"></script>
+    <script src="./assets/js/code.js" type="module"></script>
 </html>
