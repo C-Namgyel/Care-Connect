@@ -36,7 +36,18 @@ function closeNav() {
         }
     }
 }
+function playSound(filename) {
+    let aud = document.createElement("audio");
+    aud.src = `./assets/audio/${filename}.mp3`;
+    document.body.appendChild(aud);
+    aud.play();
+    aud.onended = function() {
+        aud.remove();
+    }
+}
 
 // Variables
 var authData;
 var userDetails;
+var listenStart = 0;
+var count = 2;

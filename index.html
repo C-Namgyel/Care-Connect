@@ -1,3 +1,8 @@
+<!-- Work On Manage Category -->
+<!-- Work On Manage Category -->
+<!-- Work On Manage Category -->
+<!-- Work On Manage Category -->
+<!-- Work On Manage Category -->
 <html>
     <head>
         <title>Care Connect</title>
@@ -9,6 +14,7 @@
         <link rel="stylesheet" href="./assets/css/auth.css">
         <link rel="stylesheet" href="./assets/css/home.css">
         <link rel="stylesheet" href="./assets/css/tapToSpeak.css">
+        <link rel="stylesheet" href="./assets/css/typeToSpeak.css">
         <link rel="icon" type="image/x-icon" href="./assets/img/logo.png">
     </head>
     <body>
@@ -137,6 +143,7 @@
             <div class="scrnDiv">
                 <input id="connectUID" placeholder="Child's UID">
                 <button id="connectBtn" class="buttons">Connect</button>
+                <button id="disconnectBtn" class="buttons" hidden>Disconnect</button>
             </div>
         </div>
 
@@ -199,6 +206,11 @@
                 <button id="tapToSpeakAudioBtn" class="buttons">Add</button>
             </div>
         </div>
+        <div id="manageCategory" class="scrn" hidden>
+            <div class="scrnDiv">
+
+            </div>
+        </div>
         
         <!-- Reminder Screen -->
         <div id="reminderScrn" class="scrn" hidden>
@@ -206,6 +218,7 @@
                 <div class="homeBtn"></div>
                 <b class="title">Reminder</b>
             </div>
+            <div id="reminderAdd" class="addBtns"></div>
         </div>
         
         <!-- Games Screen -->
@@ -214,6 +227,7 @@
                 <div class="homeBtn"></div>
                 <b class="title">Games</b>
             </div>
+            <div id="gamesAdd" class="addBtns"></div>
         </div>
         
         <!-- Mood Screen -->
@@ -222,6 +236,7 @@
                 <div class="homeBtn"></div>
                 <b class="title">Mood</b>
             </div>
+            <div id="moodAdd" class="addBtns"></div>
         </div>
 
         <!-- Type to Speak Screen -->
@@ -230,8 +245,10 @@
                 <div class="homeBtn"></div>
                 <b class="title">Type to Speak</b>
             </div>
-            <textarea id="typeToSpeakText" placeholder="Type the message"></textarea><br>
-            <button id="typeToSpeakBtn">Speak</button>
+            <div class="scrnDiv">
+                <textarea id="typeToSpeakText" placeholder="Type the message"></textarea><br>
+                <button id="typeToSpeakBtn" class="buttons">Speak</button>
+            </div>
         </div>
         
         <!-- Emergency Screen -->

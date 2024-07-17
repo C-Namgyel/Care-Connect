@@ -7,7 +7,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+import { getDatabase, ref, set, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -49,6 +49,13 @@ onAuthStateChanged(auth, (user) => {
                     document.getElementById("navName").innerHTML = userDetails.username;
                     document.getElementById("navEmail").innerHTML = userDetails.email;
                     document.getElementById("navUID").innerHTML = authData.uid;
+                    if (userDetails.accountType == "Parent") {
+                        startListening()
+                        document.getElementById("typeToSpeak").style.display = "none";
+                        document.getElementById("emergency").style.display = "none";
+                    } else {
+                        document.getElementById("connect").hidden = true;
+                    }
                 } else {
                     document.getElementById("splashDiv").hidden = true;
                     document.getElementById("mainAuth").hidden = true;
@@ -87,6 +94,13 @@ document.getElementById("navUID").onclick = function() {
 }
 document.getElementById("connect").onclick = function() {
     setScreen("connectScrn");
+    document.getElementById("barrier").click();
+    if (userDetails.child != undefined) {
+        document.getElementById("connectUID").value = userDetails.child;
+        document.getElementById("connectUID").disabled = true;
+        document.getElementById("connectBtn").hidden = true;
+        document.getElementById("disconnectBtn").hidden = false;
+    }
 }
 document.getElementById("signOut").onclick = function() {
     let c = confirm("Sign Out?")
@@ -114,6 +128,9 @@ document.getElementById("connectBtn").onclick = function() {
                     set(ref(database, 'users/' + authData.uid + '/child'), document.getElementById("connectUID").value.trim()).then(() => {
                         b.disabled = false;
                         b.innerHTML = "Connect";
+                        b.hidden = true;
+                        document.getElementById("connectUID").disabled = true;
+                        document.getElementById("disconnectBtn").hidden = false;
                         snackbar("Successfully Connected")
                     })
                 } else {
@@ -132,6 +149,19 @@ document.getElementById("connectBtn").onclick = function() {
         b.innerHTML = "Connect";
         snackbar("Please enter the child's UID");
     }
+}
+document.getElementById("disconnectBtn").onclick = function() {
+    let b = this;
+    b.disabled = true;
+    b.innerHTML = "Disonnecting";
+    set(ref(database, 'users/' + authData.uid + '/child'), null).then(() => {
+        b.disabled = false;
+        b.innerHTML = "Disconnect";
+        b.hidden = true;
+        document.getElementById("connectUID").disabled = false;
+        document.getElementById("connectBtn").hidden = false;
+        snackbar("Successfully Disconnected");
+    })
 }
 
 // Auth Screen
@@ -309,26 +339,24 @@ for (let b of document.querySelectorAll(".homeMenu")) {
                 
             } else if (b.id == "mood") {
                 
-            } else if (b.id == "typeToSpeak") {
-                
-            } else if (b.id == "emergency") {
-                setScreen("homeScrn");
-                let synth = window.speechSynthesis;
-                let ourText = "Hello! I need help!";
-                let utterThis = new SpeechSynthesisUtterance(ourText);
-                synth.speak(utterThis);
             }
         } else {
             if (b.id == "tapToSpeak") {
-            
-            } else if (b.id == "text") {
-    
+                document.getElementById("tapToSpeakAdd").hidden = true;
             } else if (b.id == "reminder") {
-                
+                document.getElementById("reminderAdd").hidden = true;
             } else if (b.id == "games") {
-                
+                document.getElementById("gamesAdd").hidden = true;
             } else if (b.id == "mood") {
-                
+                document.getElementById("moodAdd").hidden = true;
+            } else if (b.id == "typeToSpeak") {
+
+            } else if (b.id == "emergency") {
+                setScreen("homeScrn");
+                playSound("help");
+                set(ref(database, `${authData.uid}/emergency`), Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
+                    snackbar("Alerted the parent");
+                })
             }
         }
     }
@@ -408,4 +436,36 @@ document.getElementById("typeToSpeakBtn").onclick = function() {
     let ourText = document.getElementById("typeToSpeakText").value;
     let utterThis = new SpeechSynthesisUtterance(ourText);
     synth.speak(utterThis);
+    set(ref(database, `${authData.uid}/typeToSpeak`), document.getElementById("typeToSpeakText").value + "&kiba" + Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
+        snackbar("Message Delivered");
+    });
+}
+document.getElementById("typeToSpeakText").oninput = function() {
+    this.style.height = 50;
+    if (this.scrollHeight >= 50) {
+        this.style.height = this.scrollHeight;
+    } else {
+        this.style.height = 50;
+    }
+}
+
+// Listen for changes in db
+function startListening() {
+    onValue(ref(database, `${authData.uid}/emergency`), (snapshot) => {
+        if (listenStart == count) {
+            playSound("help");
+        } else {
+            listenStart += 1;
+        }
+    });
+    onValue(ref(database, `${authData.uid}/typeToSpeak`), (snapshot) => {
+        if (listenStart == count) {
+            let text = snapshot.val().split("&kiba")[0];
+            let synth = window.speechSynthesis;
+            let utterThis = new SpeechSynthesisUtterance(text);
+            synth.speak(utterThis);
+        } else {
+            listenStart += 1;
+        }
+    });
 }
