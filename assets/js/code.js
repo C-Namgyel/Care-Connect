@@ -1,7 +1,3 @@
-// Temporary Code
-// document.getElementById("mainAuth").hidden = true;
-// document.getElementById("homeScrn").hidden = false;
-
 // Firebase
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
@@ -451,14 +447,15 @@ document.getElementById("typeToSpeakText").oninput = function() {
 
 // Listen for changes in db
 function startListening() {
-    onValue(ref(database, `${authData.uid}/emergency`), (snapshot) => {
+    console.log("Started Listening")
+    onValue(ref(database, `${userDetails.child}/emergency`), (snapshot) => {
         if (listenStart == count) {
             playSound("help");
         } else {
             listenStart += 1;
         }
     });
-    onValue(ref(database, `${authData.uid}/typeToSpeak`), (snapshot) => {
+    onValue(ref(database, `${userDetails.child}/typeToSpeak`), (snapshot) => {
         if (listenStart == count) {
             let text = snapshot.val().split("&kiba")[0];
             let synth = window.speechSynthesis;
