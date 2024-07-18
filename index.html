@@ -1,13 +1,9 @@
-<!-- Work On Manage Category -->
-<!-- Work On Manage Category -->
-<!-- Work On Manage Category -->
-<!-- Work On Manage Category -->
-<!-- Work On Manage Category -->
 <html>
     <head>
         <title>Care Connect</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./assets/css/general.css">
+        <link rel="stylesheet" href="./assets/css/notify.css">
         <link rel="stylesheet" href="./assets/css/nav.css">
         <link rel="stylesheet" href="./assets/css/navFeatures.css">
         <link rel="stylesheet" href="./assets/css/basic.css">
@@ -125,12 +121,12 @@
                 <b class="title">Home</b>
             </div>
             <div id="homeDiv">
-                <button id="tapToSpeak" class="homeMenu"><b class="homeLabel">Tap to Speak</b></button>
-                <button id="reminder" class="homeMenu"><b class="homeLabel">Reminder</b></button>
-                <button id="games" class="homeMenu"><b class="homeLabel">Games</b></button>
-                <button id="mood" class="homeMenu"><b class="homeLabel">Mood</b></button>
-                <button id="typeToSpeak" class="homeMenu"><b class="homeLabel">Type to Speak</b></button>
-                <button id="emergency" class="homeMenu"><b class="homeLabel">Emergency</b></button>
+                <button id="tapToSpeak" style="background-image: url(./assets/img/tapToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Tap to Speak</b><br>
+                <button id="reminder" style="background-image: url(./assets/img/Reminder.png);" class="homeMenu"></button><br><b class="homeLabel">Reminder</b><br>
+                <button id="games" style="background-image: url(./assets/img/Games.png);" class="homeMenu"></button><br><b class="homeLabel">Games</b><br>
+                <button id="mood" style="background-image: url(./assets/img/mood.png);" class="homeMenu"></button><br><b class="homeLabel">Mood</b><br>
+                <button id="typeToSpeak" style="background-image: url(./assets/img/typeToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Type to Speak</b><br>
+                <button id="emergency" style="background-image: url(./assets/img/emergency.png);" class="homeMenu"></button><br><b class="homeLabel">Emergency</b><br>
             </div>
         </div>
 
@@ -153,7 +149,18 @@
                 <div class="homeBtn"></div>
                 <b class="title">Tap to Speak</b>
             </div>
+            <select id="tapToSpeakCategory">
+                <option disabled selected hidden>Select Category</option>
+            </select>
+            <div id="tapToSpeakHolder" class="scrnDiv"></div>
             <div id="tapToSpeakAdd" class="addBtns"></div>
+        </div>
+        <div id="tapToSpeakChildScrn" class="scrn" hidden>
+            <div class="headings">
+                <div id="tapToSpeakChildBack" class="backBtn"></div>
+                <b class="title">Tap to Speak</b>
+            </div>
+            <div id="tapToSpeakChildHolder" class="scrnDiv"></div>
         </div>
         <div id="tapToSpeakT2SAddScrn" class="scrn" hidden>
             <div class="headings">
@@ -161,23 +168,20 @@
                 <b class="title">Tap to Speak</b>
             </div>
             <div class="scrnDiv">
-                <div id="tapToSpeakT2SImg"></div><br>
-                <button id="tapToSpeakT2SInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakT2SInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakT2SInpText">Insert Image</a></button><br>
-                <input id="tapToSpeakT2SName" placeholder="Name">
-                <select id="tapToSpeakT2SCaterogy">
-                    <option value="" hidden selected>Category</option>
-                    <option>Foods</option>
-                    <option>Fruits</option>
-                    <option>People</option>
-                    <option>Place</option>
-                    <option>Manage Category</option>
-                </select>
-                <select id="tapToSpeakT2SSelect">
-                    <option selected>Text to Speech</option>
-                    <option>Audio</option>
-                </select><br>
-                <textarea id="tapToSpeakT2SMessage" resize="false" placeholder="Type the message of the picture"></textarea>
-                <button id="tapToSpeakT2SBtn" class="buttons">Add</button>
+                <form id="tapToSpeakT2SForm">
+                    <div id="tapToSpeakT2SImg"></div><br>
+                    <button id="tapToSpeakT2SInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakT2SInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakT2SInpText">Insert Image</a></button><br>
+                    <input required id="tapToSpeakT2SName" placeholder="Name">
+                    <select required id="tapToSpeakT2SCaterogy">
+                        <option value="" hidden selected>Category</option>
+                        <option>Add Category</option></select>
+                    <select id="tapToSpeakT2SSelect">
+                        <option selected>Text to Speech</option>
+                        <option>Audio</option>
+                    </select><br>
+                    <textarea required id="tapToSpeakT2SMessage" resize="false" placeholder="Type the message of the picture"></textarea>
+                    <button id="tapToSpeakT2SBtn" class="buttons" type="submit">Add</button>
+                </form>
             </div>
         </div>
         <div id="tapToSpeakAudioAddScrn" class="scrn" hidden>
@@ -191,12 +195,7 @@
                 <input id="tapToSpeakAudioName" placeholder="Name">
                 <select id="tapToSpeakAudioCaterogy">
                     <option value="" hidden selected>Category</option>
-                    <option>Foods</option>
-                    <option>Fruits</option>
-                    <option>People</option>
-                    <option>Place</option>
-                    <option>Manage Category</option>
-                </select>
+                    <option>Add Category</option></select>
                 <select id="tapToSpeakAudioSelect">
                     <option>Text to Speech</option>
                     <option selected>Audio</option>
@@ -207,7 +206,7 @@
             </div>
         </div>
         <div id="manageCategory" class="scrn" hidden>
-            <div class="scrnDiv">
+            <div id="manageCategoryDiv" class="scrnDiv">
 
             </div>
         </div>

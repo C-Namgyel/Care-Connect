@@ -27,6 +27,16 @@ body {
         color: #ffffff;
         font-size: 30px;
     }
+    .scrnDiv {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 90%;
+        overflow: auto;
+        overflow-wrap: break-word;
+        text-align: center;
+    }
     .backBtn {
         background-image: url(../img/back-white.svg);
         background-position: center;

@@ -4,7 +4,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/fireba
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
 import { getDatabase, ref, set, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
-import { getStorage, ref as sref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
+import { getStorage, ref as sref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,7 +37,6 @@ onAuthStateChanged(auth, (user) => {
         if (user.emailVerified) {
             get(child(ref(database), `users/${user.uid}`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    console.log("User is valid")
                     userDetails = snapshot.val();
                     document.getElementById("splashDiv").hidden = true;
                     document.getElementById("mainAuth").hidden = true;
@@ -50,6 +49,7 @@ onAuthStateChanged(auth, (user) => {
                         document.getElementById("typeToSpeak").style.display = "none";
                         document.getElementById("emergency").style.display = "none";
                     } else {
+                        startListeningChild()
                         document.getElementById("connect").hidden = true;
                     }
                 } else {
@@ -61,12 +61,10 @@ onAuthStateChanged(auth, (user) => {
                 console.error(error);
             });              
         } else {
-            console.log('User email is not verified.');
             document.getElementById("splashDiv").hidden = true;
             document.getElementById("emailVerify").style.display = "flex";
         }
     } else {
-        console.log('User is signed out.');
         document.getElementById("splashDiv").hidden = true;
     }
 });
@@ -106,7 +104,7 @@ document.getElementById("signOut").onclick = function() {
             window.location.reload();
         }).catch((error) => {
             // An error happened.
-            console.log("Sign out error: ", error)
+            console.error("Sign out error: ", error)
         });
     }
 }
@@ -185,7 +183,7 @@ document.getElementById('loginForm').onsubmit = function (e) {
         let errorCode = error.code;
         let errorMessage = error.message;
         // Handle errors
-        console.log(errorCode)
+        console.error(errorCode)
         if (errorCode == "auth/invalid-email") {
             snackbar("Invalid Email");
         } else if (errorCode == "auth/invalid-credential") {
@@ -263,7 +261,6 @@ function googleAuth() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log("Success", user)
         // IdP data available using getAdditionalUserInfo(result)
         let div = document.createElement("div");
         div.style = "position: fixed; left: 0%; top: 0%; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(0, 0, 0, 0.75); color: white; font-weight: bolder; font-size: 10vw; z-index: 15;";
@@ -283,7 +280,7 @@ function googleAuth() {
         // ...
     }).catch((error) => {
         // Handle Errors here.
-        console.log(error)
+        console.error(error)
         const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
@@ -317,7 +314,7 @@ document.getElementById("signOut2").onclick = function() {
             window.location.reload();
         }).catch((error) => {
             // An error happened.
-            console.log("Sign out error: ", error)
+            console.error("Sign out error: ", error)
         });
     }
 }
@@ -328,7 +325,7 @@ for (let b of document.querySelectorAll(".homeMenu")) {
         setScreen(`${b.id}Scrn`);
         if (userDetails.accountType == "Parent") {
             if (b.id == "tapToSpeak") {
-                
+                loadTapToSpeak();
             } else if (b.id == "reminder") {
     
             } else if (b.id == "games") {
@@ -339,6 +336,8 @@ for (let b of document.querySelectorAll(".homeMenu")) {
         } else {
             if (b.id == "tapToSpeak") {
                 document.getElementById("tapToSpeakAdd").hidden = true;
+                document.getElementById("tapToSpeakCategory").hidden = true;
+                loadTapToSpeakChild();
             } else if (b.id == "reminder") {
                 document.getElementById("reminderAdd").hidden = true;
             } else if (b.id == "games") {
@@ -359,6 +358,67 @@ for (let b of document.querySelectorAll(".homeMenu")) {
 }
 
 // Tap to Speak
+function loadTapToSpeak() {
+    document.getElementById("tapToSpeakHolder").innerHTML = "<b style='font-size: 30;'>Loading</b>";
+    document.getElementById("tapToSpeakCategory").disabled = true;
+    get(child(ref(database), `${userDetails.child}/tapToSpeak`)).then((snapshot) => {
+        document.getElementById("tapToSpeakHolder").innerHTML = "";
+        document.getElementById("tapToSpeakCategory").disabled = false;
+        let dat = snapshot.val();
+        document.getElementById("tapToSpeakCategory").innerHTML = "<option disabled selected hidden>Select Category</option>";
+        if (dat != null) {
+            categories = Object.keys(dat);
+        } else {
+            categories = [];
+        }
+        for (let o of categories) {
+            let opt = document.createElement("option");
+            opt.innerHTML = o;
+            document.getElementById("tapToSpeakCategory").appendChild(opt);
+        }
+    })
+}
+function loadTapToSpeakChild() {
+    document.getElementById("tapToSpeakHolder").innerHTML = "<b style='font-size: 30;'>Loading</b>";
+    get(child(ref(database), `${authData.uid}/tapToSpeak`)).then((snapshot) => {
+        document.getElementById("tapToSpeakHolder").innerHTML = "";
+        let dat = snapshot.val();
+        if (dat != null) {
+            categories = Object.keys(dat);
+        } else {
+            categories = [];
+        }
+        for (let o of categories) {
+            let cat = document.createElement("button");
+            cat.className = "tapToSpeakMenu";
+            cat.style.backgroundImage = `url(${dat[o].picture})`
+            cat.innerHTML = o;
+            document.getElementById("tapToSpeakHolder").appendChild(cat);
+            document.getElementById("tapToSpeakHolder").appendChild(document.createElement("br"));
+            cat.onclick = function() {
+                setScreen("tapToSpeakChildScrn");
+                document.getElementById("tapToSpeakChildHolder").innerHTML = "";
+                console.log(Object.keys(dat[o]));
+                for (let l of Object.keys(dat[o])) {
+                    console.log(dat[o][l]);
+                    let cat = document.createElement("button");
+                    cat.className = "tapToSpeakChildMenu";
+                    cat.style.backgroundImage = `url(${dat[o][l].picture})`
+                    document.getElementById("tapToSpeakChildHolder").appendChild(cat);
+                    document.getElementById("tapToSpeakChildHolder").appendChild(document.createElement("br"));
+                    let b = document.createElement("b");
+                    b.className = "tapToSpeakChildLabel";
+                    b.innerHTML = l;
+                    document.getElementById("tapToSpeakChildHolder").appendChild(b);
+                    document.getElementById("tapToSpeakChildHolder").appendChild(document.createElement("br"));
+                }
+            }
+        }
+    });
+}
+document.getElementById("tapToSpeakChildBack").onclick = function() {
+    setScreen("tapToSpeakScrn");
+}
 ////Mode
 document.getElementById("tapToSpeakT2SSelect").oninput = function() {
     if (this.value == "Audio") {
@@ -381,6 +441,18 @@ document.getElementById("tapToSpeakAudioBack").onclick = function() {
 }
 document.getElementById("tapToSpeakAdd").onclick = function() {
     setScreen("tapToSpeakT2SAddScrn")
+    for (let x of categories) {
+        document.getElementById("tapToSpeakT2SCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
+        <option>Add Category</option></select>`
+        document.getElementById("tapToSpeakAudioCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
+        <option>Add Category</option></select>`
+        let opt = document.createElement("option")
+        opt.innerHTML = x;
+        let opt2 = document.createElement("option")
+        opt2.innerHTML = x;
+        document.getElementById("tapToSpeakT2SCaterogy").insertBefore(opt, document.getElementById("tapToSpeakT2SCaterogy").lastChild);
+        document.getElementById("tapToSpeakAudioCaterogy").insertBefore(opt2, document.getElementById("tapToSpeakAudioCaterogy").lastChild);
+    }
 }
 ////T2S
 document.getElementById("tapToSpeakT2SInp").oninput = function() {
@@ -399,11 +471,86 @@ document.getElementById("tapToSpeakT2SMessage").oninput = function() {
     }
 }
 document.getElementById("tapToSpeakT2SCaterogy").oninput = function() {
-    if (this.value == "Manage Category") {
+    if (this.value == "Add Category") {
         this.value = "";
-        // Goto manage category screen
+        inquire("Enter the new category", "", function(e) {
+            if (e != null) {
+                let opt = document.createElement("option");
+                opt.innerHTML = e;
+                console.log(document.getElementById("tapToSpeakT2SCaterogy").lastChild)
+                document.getElementById("tapToSpeakT2SCaterogy").insertBefore(opt, document.getElementById("tapToSpeakT2SCaterogy").lastChild);
+                document.getElementById("tapToSpeakT2SCaterogy").value = e;
+            }
+        })
     }
 }
+document.getElementById("tapToSpeakT2SForm").onsubmit = function(e) {
+    e.preventDefault(); // Prevent form submission
+    document.getElementById("tapToSpeakT2SBtn").disabled = true;
+    document.getElementById("tapToSpeakT2SBtn").innerHTML = "Adding";
+    if (document.getElementById("tapToSpeakT2SInp").files[0] != undefined) {
+        uploadBytes(sref(storage, `${userDetails.child}/tapToSpeak/${document.getElementById("tapToSpeakT2SCaterogy").value}/${document.getElementById("tapToSpeakT2SName").value}/picture`), document.getElementById("tapToSpeakT2SInp").files[0]).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+            // Get the download URL
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+                set(ref(database, `${userDetails.child}/tapToSpeak/${document.getElementById("tapToSpeakT2SCaterogy").value}/${document.getElementById("tapToSpeakT2SName").value}`), {
+                    "picture": downloadURL,
+                    "message": document.getElementById("tapToSpeakT2SMessage").value,
+                    "type": "T2S"
+                }).then(() => {
+                    snackbar("Card Added");
+                    if (categories.includes(document.getElementById("tapToSpeakT2SCaterogy").value) == false) {
+                        categories.push(document.getElementById("tapToSpeakT2SCaterogy").value);
+                    }
+                    document.getElementById("tapToSpeakT2SBtn").disabled = false;
+                    document.getElementById("tapToSpeakT2SBtn").innerHTML = "Add";
+                    document.getElementById("tapToSpeakT2SInpText").innerHTML = "Insert Image";
+                    document.getElementById("tapToSpeakT2SForm").reset();
+                    document.getElementById("tapToSpeakT2SImg").style.backgroundImage = "";
+                    document.getElementById("tapToSpeak").click();
+                })
+                .catch((error) => {
+                    console.error(error)
+                });
+            });
+          });
+    } else {
+        snackbar("Please upload a picture");
+        document.getElementById("tapToSpeakT2SBtn").disabled = false;
+        document.getElementById("tapToSpeakT2SBtn").innerHTML = "Add";
+    }
+}
+document.getElementById("tapToSpeakCategory").oninput = function() {
+    let n = this.value
+    get(child(ref(database), `${userDetails.child}/tapToSpeak/${n}`)).then((snapshot) => {
+        document.getElementById("tapToSpeakHolder").innerHTML = "";
+        for (let y of Object.keys(snapshot.val())) {
+            let holder = document.createElement("div");
+            holder.className = "tapToSpeakDiv";
+            holder.innerHTML = y;
+            document.getElementById("tapToSpeakHolder").appendChild(holder)
+            let del = document.createElement("div");
+            del.className = "tapToSpeakDel";
+            holder.appendChild(del);
+            del.onclick = function() {
+                verify("Delete this card?", function(d) {
+                    if (d == true) {
+                        holder.innerHTML = "Deleting";
+                        del.hidden = true;
+                        console.log(`${userDetails.child}/tapToSpeak/${n}/${y}`)
+                        set(ref(database, `${userDetails.child}/tapToSpeak/${n}/${y}`), null).then(() => {
+                            deleteObject(sref(storage, `${userDetails.child}/tapToSpeak/${n}/${y}/picture`)).then(() => {
+                                holder.remove();
+                                document.getElementById("tapToSpeak").click();
+                            })
+                        })
+                    }
+                })
+            }
+        }
+    })
+}
+
 ////Audio
 document.getElementById("tapToSpeakAudioInp").oninput = function() {
     if (this.files[0] != undefined) {
@@ -413,9 +560,17 @@ document.getElementById("tapToSpeakAudioInp").oninput = function() {
     }
 }
 document.getElementById("tapToSpeakAudioCaterogy").oninput = function() {
-    if (this.value == "Manage Category") {
+    if (this.value == "Add Category") {
         this.value = "";
-        // Goto manage category screen
+        inquire("Enter the new category", "", function(e) {
+            if (e != null) {
+                let opt = document.createElement("option");
+                opt.innerHTML = e;
+                console.log(document.getElementById("tapToSpeakT2SCaterogy").lastChild)
+                document.getElementById("tapToSpeakT2SCaterogy").insertBefore(opt, document.getElementById("tapToSpeakT2SCaterogy").lastChild);
+                document.getElementById("tapToSpeakT2SCaterogy").value = e;
+            }
+        })
     }
 }
 document.getElementById("tapToSpeakAudioMessage").oninput = function() {
@@ -447,10 +602,14 @@ document.getElementById("typeToSpeakText").oninput = function() {
 
 // Listen for changes in db
 function startListening() {
-    console.log("Started Listening")
     onValue(ref(database, `${userDetails.child}/emergency`), (snapshot) => {
         if (listenStart == count) {
             playSound("help");
+            inquire("Your child needs help!", "I'm Coming", function(out) {
+                set(ref(database, `${userDetails.child}/typeToSpeakReply`), out + "&kiba" + Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
+                    snackbar("Message Delivered");
+                });
+            })
         } else {
             listenStart += 1;
         }
@@ -461,8 +620,16 @@ function startListening() {
             let synth = window.speechSynthesis;
             let utterThis = new SpeechSynthesisUtterance(text);
             synth.speak(utterThis);
+            inquire("Your child is saying \"" + text + "\"", "Okay", function(out) {
+
+            });
         } else {
             listenStart += 1;
         }
     });
+}
+function startListeningChild() {
+    onValue(ref(database, `${authData.uid}/emergencyReply`), (snapshot) => {
+
+    })
 }

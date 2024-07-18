@@ -21,23 +21,22 @@
         text-align: center;
     }
     .homeMenu {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 30%;
-        padding: 2.5%;
-        margin-left: 13.333%;
-        margin-bottom: 15%;
+        width: 75%;
         background-color: white;
         border-style: solid;
-        border-radius: 15px;
+        border-radius: 75px;
         border-color: black;
         border-width: 2px;
         aspect-ratio: 1/1;
-        text-align: center;
-        float: left;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
     }
     .homeLabel {
-        align-self: flex-end
+        color: black;
+        font-size: 25px;
+        align-self: flex-end;
+        display: inline-block;
+        margin-bottom: 10%;
     }
 }
