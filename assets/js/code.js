@@ -818,7 +818,7 @@ function startListeningChild() {
     onValue(ref(database, `${authData.uid}/message`), (snapshot) => {
         if (childLoad == 1) {
             notify(snapshot.val().split("&kiba")[0]);
-            T2S(document.getElementById("messageText").value);
+            T2S(snapshot.val().split("&kiba")[0]);
         } else {
             childLoad = 1;
         }
