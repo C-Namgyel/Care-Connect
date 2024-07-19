@@ -127,7 +127,8 @@ document.getElementById("connectBtn").onclick = function() {
                         b.hidden = true;
                         document.getElementById("connectUID").disabled = true;
                         document.getElementById("disconnectBtn").hidden = false;
-                        snackbar("Successfully Connected")
+                        userDetails.child = document.getElementById("connectUID").value.trim();
+                        snackbar("Successfully Connected");
                     })
                 } else {
                     b.disabled = false;
@@ -305,7 +306,6 @@ for (let h of document.querySelectorAll(".homeBtn")) {
         setScreen("homeScrn");
     }
 }
-
 
 // Sign Out from verify screen
 document.getElementById("signOut2").onclick = function() {
@@ -487,7 +487,6 @@ document.getElementById("tapToSpeakT2SCaterogy").oninput = function() {
             if (e != null) {
                 let opt = document.createElement("option");
                 opt.innerHTML = e;
-                console.log(document.getElementById("tapToSpeakT2SCaterogy").lastChild)
                 document.getElementById("tapToSpeakT2SCaterogy").insertBefore(opt, document.getElementById("tapToSpeakT2SCaterogy").lastChild);
                 document.getElementById("tapToSpeakT2SCaterogy").value = e;
             }
@@ -609,9 +608,9 @@ document.getElementById("tapToSpeakAudioCaterogy").oninput = function() {
             if (e != null) {
                 let opt = document.createElement("option");
                 opt.innerHTML = e;
-                console.log(document.getElementById("tapToSpeakT2SCaterogy").lastChild)
-                document.getElementById("tapToSpeakT2SCaterogy").insertBefore(opt, document.getElementById("tapToSpeakT2SCaterogy").lastChild);
-                document.getElementById("tapToSpeakT2SCaterogy").value = e;
+                console.log(document.getElementById("tapToSpeakAudioCaterogy").lastChild)
+                document.getElementById("tapToSpeakAudioCaterogy").insertBefore(opt, document.getElementById("tapToSpeakAudioCaterogy").lastChild);
+                document.getElementById("tapToSpeakAudioCaterogy").value = e;
             }
         })
     }

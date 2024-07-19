@@ -17,6 +17,8 @@
         display: flex;
         flex-direction: column;
         z-index: 2;
+        overflow: auto;
+        overflow-wrap: break-word;
     }
     #navHead {
         position: relative;
@@ -25,6 +27,8 @@
         top: 0%;
         left: 0%;
         padding-bottom: 20px;
+        overflow: auto;
+        overflow-wrap: break-word;
     }
     #navMenu {
         position: relative;
