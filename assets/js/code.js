@@ -758,6 +758,7 @@ function startListening() {
     onValue(ref(database, `${userDetails.child}/emergency`), (snapshot) => {
         if (listenStart == count) {
             playSound("./assets/audio/help.mp3");
+            navigator.vibrate([250, 200, 250]);
             verify("Your child needs help!\nClick OK to reply.", function(out) {
                 if (out == true) {
                     document.getElementById("message").click();
@@ -770,6 +771,7 @@ function startListening() {
     onValue(ref(database, `${userDetails.child}/typeToSpeak`), (snapshot) => {
         if (listenStart == count) {
             T2S(snapshot.val().split("&kiba")[0]);
+            navigator.vibrate([250, 200, 250]);
             verify("Your child is saying \"" + snapshot.val().split("&kiba")[0] + "\"\nClick OK to reply.", function(out) {
                 if (out == true) {
                     document.getElementById("message").click();
@@ -782,6 +784,7 @@ function startListening() {
     onValue(ref(database, `${userDetails.child}/mood`), (snapshot) => {
         if (listenStart == count) {
             T2S(`Your child is feeling ${snapshot.val().split("&kiba")[0]}`);
+            navigator.vibrate([250, 200, 250]);
             verify(`Your child is feeling ${snapshot.val().split("&kiba")[0]}\nClick OK to reply.`, function(out) {
                 if (out == true) {
                     document.getElementById("message").click();
@@ -796,6 +799,7 @@ function startListening() {
             let val = snapshot.val().split("&kiba");
             if (val[1] == "T2S") {
                 T2S(val[0]);
+                navigator.vibrate([250, 200, 250]);
                 verify("Your child is saying \"" + val[0] + "\"\nClick OK to reply.", function(out) {
                     if (out == true) {
                         document.getElementById("message").click();
@@ -803,6 +807,7 @@ function startListening() {
                 })
             } else {
                 playSound(val[0]);
+                navigator.vibrate([250, 200, 250]);
                 verify("Your child clicked \"" + val[2] + "\"\nClick OK to reply.", function(out) {
                     if (out == true) {
                         document.getElementById("message").click();
@@ -818,6 +823,7 @@ function startListeningChild() {
     onValue(ref(database, `${authData.uid}/message`), (snapshot) => {
         if (childLoad == 1) {
             notify(snapshot.val().split("&kiba")[0]);
+            navigator.vibrate([250, 200, 250]);
             T2S(snapshot.val().split("&kiba")[0]);
         } else {
             childLoad = 1;
