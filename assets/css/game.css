@@ -1,0 +1,21 @@
+@media (max-width: 600px) {
+    .gameLabel {
+        color: black;
+        font-size: 35px;
+        align-self: flex-end;
+        display: inline-block;
+        margin-bottom: 10%;
+    }
+    .gameMenu {
+        width: 75%;
+        background-color: white;
+        border-style: solid;
+        border-radius: 75px;
+        border-color: black;
+        border-width: 2px;
+        aspect-ratio: 1/1;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}

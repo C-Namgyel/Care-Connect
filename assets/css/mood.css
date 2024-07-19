@@ -1,0 +1,31 @@
+@media (max-width: 600px) {
+    .moodMenu {
+        width: 75%;
+        background-color: white;
+        border-style: solid;
+        border-radius: 75px;
+        border-color: black;
+        border-width: 2px;
+        aspect-ratio: 1/1;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .moodLabel {
+        color: black;
+        font-size: 35px;
+        align-self: flex-end;
+        display: inline-block;
+        margin-bottom: 10%;
+    }
+    .moodDiv {
+        position: absolute;
+        top: 2.5%;
+        left: 10%;
+        width: 80%;
+        height: 97.5%;
+        overflow: auto;
+        overflow-wrap: break-word;
+        text-align: center;
+    }
+}

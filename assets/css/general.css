@@ -1,5 +1,5 @@
 body {
-    background-color: #B0E2FF
+    background-color: #64C8FF
 }
 
 /* Main */
@@ -18,7 +18,7 @@ body {
         height: 10%;
         left: 0%;
         top: 0%;
-        background-color: #000000;
+        background-color: #3232FF;
         display: flex;
         align-items: center;
         justify-content: center;

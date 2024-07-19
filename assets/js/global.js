@@ -36,9 +36,9 @@ function closeNav() {
         }
     }
 }
-function playSound(filename) {
+function playSound(dir) {
     let aud = document.createElement("audio");
-    aud.src = `./assets/audio/${filename}.mp3`;
+    aud.src = dir;
     document.body.appendChild(aud);
     aud.play();
     aud.onended = function() {
@@ -190,10 +190,20 @@ function verify(message, code) {
         }
     }
 }
+function randomNumber(min, max) {
+    return(Math.floor(Math.random()*(max - min + 1) + min))
+}
+function T2S(text) {
+    let synth = window.speechSynthesis;
+    let ourText = text;
+    let utterThis = new SpeechSynthesisUtterance(ourText);
+    synth.speak(utterThis);
+}
 
 // Variables
 var authData; // The data returned from firebase auth
 var userDetails; // The user data stored in the database
 var listenStart = 0; // Will start listening for changes when it reaches the count value
-var count = 2;
+var count = 3;
 var categories;
+var childLoad = 0;

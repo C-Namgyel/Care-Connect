@@ -46,10 +46,12 @@ onAuthStateChanged(auth, (user) => {
                     document.getElementById("navUID").innerHTML = authData.uid;
                     if (userDetails.accountType == "Parent") {
                         startListening()
-                        document.getElementById("typeToSpeak").style.display = "none";
-                        document.getElementById("emergency").style.display = "none";
+                        document.getElementById("d5").hidden = true;
+                        document.getElementById("d6").hidden = true;
+                        document.getElementById("d3").hidden = true;;
                     } else {
                         startListeningChild()
+                        document.getElementById("d7").hidden = true;
                         document.getElementById("connect").hidden = true;
                     }
                 } else {
@@ -78,7 +80,7 @@ document.getElementById("barrier").onclick = function() {
 }
 document.getElementById("navUID").onclick = function() {
     let copyText = document.getElementById("navUID").innerHTML;
-    let inp = document.createElement("input")
+    let inp = document.createElement("input");
     inp.value = copyText;
     inp.select();
     inp.setSelectionRange(0, 99999); // For mobile devices
@@ -331,7 +333,8 @@ for (let b of document.querySelectorAll(".homeMenu")) {
             } else if (b.id == "games") {
                 
             } else if (b.id == "mood") {
-                
+                document.getElementById("moodChild").hidden = true;
+                document.getElementById("moodParent").hidden = false;
             }
         } else {
             if (b.id == "tapToSpeak") {
@@ -340,16 +343,12 @@ for (let b of document.querySelectorAll(".homeMenu")) {
                 loadTapToSpeakChild();
             } else if (b.id == "reminder") {
                 document.getElementById("reminderAdd").hidden = true;
-            } else if (b.id == "games") {
-                document.getElementById("gamesAdd").hidden = true;
-            } else if (b.id == "mood") {
-                document.getElementById("moodAdd").hidden = true;
-            } else if (b.id == "typeToSpeak") {
-
             } else if (b.id == "emergency") {
                 setScreen("homeScrn");
-                playSound("help");
-                set(ref(database, `${authData.uid}/emergency`), Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
+                playSound("./assets/audio/help.mp3");
+                let t = randomNumber(1, 99999);
+                console.log(t)
+                set(ref(database, `${authData.uid}/emergency`), t).then(() => {
                     snackbar("Alerted the parent");
                 })
             }
@@ -400,7 +399,6 @@ function loadTapToSpeakChild() {
                 document.getElementById("tapToSpeakChildHolder").innerHTML = "";
                 console.log(Object.keys(dat[o]));
                 for (let l of Object.keys(dat[o])) {
-                    console.log(dat[o][l]);
                     let cat = document.createElement("button");
                     cat.className = "tapToSpeakChildMenu";
                     cat.style.backgroundImage = `url(${dat[o][l].picture})`
@@ -411,6 +409,18 @@ function loadTapToSpeakChild() {
                     b.innerHTML = l;
                     document.getElementById("tapToSpeakChildHolder").appendChild(b);
                     document.getElementById("tapToSpeakChildHolder").appendChild(document.createElement("br"));
+                    cat.onclick = function() {
+                        let details = dat[o][l];
+                        console.log(details);
+                        if (details.type == "T2S") {
+                            T2S(details.message);
+                        } else {
+                            playSound(details.message);
+                        }
+                        set(ref(database, `${authData.uid}/tapToSpeakMessage`), `${details.message}&kiba${details.type}&kiba${l}&kiba${randomNumber(1, 99999)}`).then(() => {
+                            snackbar("Message Sent");
+                        });
+                    }
                 }
             }
         }
@@ -441,11 +451,11 @@ document.getElementById("tapToSpeakAudioBack").onclick = function() {
 }
 document.getElementById("tapToSpeakAdd").onclick = function() {
     setScreen("tapToSpeakT2SAddScrn")
+    document.getElementById("tapToSpeakT2SCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
+    <option>Add Category</option></select>`
+    document.getElementById("tapToSpeakAudioCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
+    <option>Add Category</option></select>`
     for (let x of categories) {
-        document.getElementById("tapToSpeakT2SCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
-        <option>Add Category</option></select>`
-        document.getElementById("tapToSpeakAudioCaterogy").innerHTML = `<option value="" hidden selected>Category</option>
-        <option>Add Category</option></select>`
         let opt = document.createElement("option")
         opt.innerHTML = x;
         let opt2 = document.createElement("option")
@@ -535,15 +545,40 @@ document.getElementById("tapToSpeakCategory").oninput = function() {
             del.onclick = function() {
                 verify("Delete this card?", function(d) {
                     if (d == true) {
-                        holder.innerHTML = "Deleting";
-                        del.hidden = true;
-                        console.log(`${userDetails.child}/tapToSpeak/${n}/${y}`)
-                        set(ref(database, `${userDetails.child}/tapToSpeak/${n}/${y}`), null).then(() => {
-                            deleteObject(sref(storage, `${userDetails.child}/tapToSpeak/${n}/${y}/picture`)).then(() => {
-                                holder.remove();
-                                document.getElementById("tapToSpeak").click();
+                        if (snapshot.val()[y].type == "T2S") {
+                            holder.innerHTML = "Deleting";
+                            del.hidden = true;
+                            console.log(`${userDetails.child}/tapToSpeak/${n}/${y}`)
+                            set(ref(database, `${userDetails.child}/tapToSpeak/${n}/${y}`), null).then(() => {
+                                deleteObject(sref(storage, `${userDetails.child}/tapToSpeak/${n}/${y}/picture`)).then(() => {
+                                    holder.remove();
+                                    document.getElementById("tapToSpeak").click();
+                                })
                             })
-                        })
+                        } else {
+                            holder.innerHTML = "Deleting";
+                            del.hidden = true;
+                            console.log(`${userDetails.child}/tapToSpeak/${n}/${y}`)
+                            set(ref(database, `${userDetails.child}/tapToSpeak/${n}/${y}`), null).then(() => {
+                                let p = 0;
+                                deleteObject(sref(storage, `${userDetails.child}/tapToSpeak/${n}/${y}/picture`)).then(() => {
+                                    if (p == 1) {
+                                        holder.remove();
+                                        document.getElementById("tapToSpeak").click();
+                                    } else {
+                                        p = 1;
+                                    }
+                                })
+                                deleteObject(sref(storage, `${userDetails.child}/tapToSpeak/${n}/${y}/message`)).then(() => {
+                                    if (p == 1) {
+                                        holder.remove();
+                                        document.getElementById("tapToSpeak").click();
+                                    } else {
+                                        p = 1;
+                                    }
+                                })
+                            })
+                        }
                     }
                 })
             }
@@ -557,6 +592,14 @@ document.getElementById("tapToSpeakAudioInp").oninput = function() {
         document.getElementById("tapToSpeakAudioInpText").innerHTML = "Insert Image<br>"+this.files[0].name;
         let l = URL.createObjectURL(this.files[0]);
         document.getElementById("tapToSpeakAudioImg").style.backgroundImage = `url(${l})`;
+    }
+}
+document.getElementById("tapToSpeakAudioMessage").oninput = function() {
+    this.style.height = 50;
+    if (this.scrollHeight >= 50) {
+        this.style.height = this.scrollHeight;
+    } else {
+        this.style.height = 50;
     }
 }
 document.getElementById("tapToSpeakAudioCaterogy").oninput = function() {
@@ -573,6 +616,72 @@ document.getElementById("tapToSpeakAudioCaterogy").oninput = function() {
         })
     }
 }
+document.getElementById("tapToSpeakAudioForm").onsubmit = function(e) {
+    e.preventDefault(); // Prevent form submission
+    document.getElementById("tapToSpeakAudioBtn").disabled = true;
+    document.getElementById("tapToSpeakAudioBtn").innerHTML = "Adding";
+    if (document.getElementById("tapToSpeakAudioInp").files[0] != undefined) {
+        if (document.getElementById("tapToSpeakAudioMessage").files[0] != undefined) {
+            let prog = 0; 
+            let picUrl;
+            let audUrl;
+            function upload(pic, aud) {
+                set(ref(database, `${userDetails.child}/tapToSpeak/${document.getElementById("tapToSpeakAudioCaterogy").value}/${document.getElementById("tapToSpeakAudioName").value}`), {
+                    "picture": pic,
+                    "message": aud,
+                    "type": "Audio"
+                }).then(() => {
+                    snackbar("Card Added");
+                    if (categories.includes(document.getElementById("tapToSpeakAudioCaterogy").value) == false) {
+                        categories.push(document.getElementById("tapToSpeakAudioCaterogy").value);
+                    }
+                    document.getElementById("tapToSpeakAudioBtn").disabled = false;
+                    document.getElementById("tapToSpeakAudioBtn").innerHTML = "Add";
+                    document.getElementById("tapToSpeakAudioInpText").innerHTML = "Insert Image";
+                    document.getElementById("tapToSpeakAudioMessageText").innerHTML = "Upload Audio";
+                    document.getElementById("tapToSpeakAudioForm").reset();
+                    document.getElementById("tapToSpeakAudioImg").style.backgroundImage = "";
+                    document.getElementById("tapToSpeak").click();
+                })
+                .catch((error) => {
+                    console.error(error)
+                });
+            }
+            uploadBytes(sref(storage, `${userDetails.child}/tapToSpeak/${document.getElementById("tapToSpeakAudioCaterogy").value}/${document.getElementById("tapToSpeakAudioName").value}/picture`), document.getElementById("tapToSpeakAudioInp").files[0]).then((snapshot) => {
+                console.log('Uploaded a blob or file!');
+                // Get the download URL
+                getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    picUrl = downloadURL;
+                    if (prog == 1) {
+                        upload(picUrl, audUrl);
+                    } else {
+                        prog = 1;
+                    }
+                });
+            });
+            uploadBytes(sref(storage, `${userDetails.child}/tapToSpeak/${document.getElementById("tapToSpeakAudioCaterogy").value}/${document.getElementById("tapToSpeakAudioName").value}/message`), document.getElementById("tapToSpeakAudioMessage").files[0]).then((snapshot) => {
+                console.log('Uploaded a blob or file!');
+                // Get the download URL
+                getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    audUrl = downloadURL;
+                    if (prog == 1) {
+                        upload(picUrl, audUrl);
+                    } else {
+                        prog = 1;
+                    }
+                });
+            });
+        } else {
+            snackbar("Please upload a message audio");
+        document.getElementById("tapToSpeakAudioBtn").disabled = false;
+        document.getElementById("tapToSpeakAudioBtn").innerHTML = "Add";
+        }
+    } else {
+        snackbar("Please upload a picture");
+        document.getElementById("tapToSpeakAudioBtn").disabled = false;
+        document.getElementById("tapToSpeakAudioBtn").innerHTML = "Add";
+    }
+}
 document.getElementById("tapToSpeakAudioMessage").oninput = function() {
     if (this.files[0] != undefined) {
         document.getElementById("tapToSpeakAudioMessageText").innerHTML = "Upload Audio<br>"+this.files[0].name;
@@ -583,15 +692,33 @@ document.getElementById("tapToSpeakAudioMessage").oninput = function() {
 
 // Type to speak
 document.getElementById("typeToSpeakBtn").onclick = function() {
-    let synth = window.speechSynthesis;
-    let ourText = document.getElementById("typeToSpeakText").value;
-    let utterThis = new SpeechSynthesisUtterance(ourText);
-    synth.speak(utterThis);
-    set(ref(database, `${authData.uid}/typeToSpeak`), document.getElementById("typeToSpeakText").value + "&kiba" + Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
-        snackbar("Message Delivered");
-    });
+    if (document.getElementById("typeToSpeakText").value.trim() != "") {
+        T2S(document.getElementById("typeToSpeakText").value);
+        set(ref(database, `${authData.uid}/typeToSpeak`), document.getElementById("typeToSpeakText").value + "&kiba" + randomNumber(1, 99999)).then(() => {
+            snackbar("Message Delivered");
+        });
+    }
 }
 document.getElementById("typeToSpeakText").oninput = function() {
+    this.style.height = 50;
+    if (this.scrollHeight >= 50) {
+        this.style.height = this.scrollHeight;
+    } else {
+        this.style.height = 50;
+    }
+}
+
+// Message
+document.getElementById("messageBtn").onclick = function() {
+    this.disabled = true;
+    if (document.getElementById("messageText").value.trim() != "") {
+        T2S(document.getElementById("messageText").value);
+        set(ref(database, `${userDetails.child}/message`), document.getElementById("messageText").value + "&kiba" + randomNumber(1, 99999)).then(() => {
+            snackbar("Message Delivered");
+        });
+    }
+}
+document.getElementById("messageText").oninput = function() {
     this.style.height = 50;
     if (this.scrollHeight >= 50) {
         this.style.height = this.scrollHeight;
@@ -604,32 +731,58 @@ document.getElementById("typeToSpeakText").oninput = function() {
 function startListening() {
     onValue(ref(database, `${userDetails.child}/emergency`), (snapshot) => {
         if (listenStart == count) {
-            playSound("help");
-            inquire("Your child needs help!", "I'm Coming", function(out) {
-                set(ref(database, `${userDetails.child}/typeToSpeakReply`), out + "&kiba" + Math.floor(Math.random()*(99999 - 1 + 1) + 1)).then(() => {
-                    snackbar("Message Delivered");
-                });
+            playSound("./assets/audio/help.mp3");
+            verify("Your child needs help!\nClick OK to reply.", function(out) {
+                if (out == true) {
+                    document.getElementById("message").click();
+                }
             })
         } else {
             listenStart += 1;
         }
     });
     onValue(ref(database, `${userDetails.child}/typeToSpeak`), (snapshot) => {
+        console.log(snapshot.val());
         if (listenStart == count) {
-            let text = snapshot.val().split("&kiba")[0];
-            let synth = window.speechSynthesis;
-            let utterThis = new SpeechSynthesisUtterance(text);
-            synth.speak(utterThis);
-            inquire("Your child is saying \"" + text + "\"", "Okay", function(out) {
-
+            T2S(snapshot.val().split("&kiba")[0]);
+            verify("Your child is saying \"" + snapshot.val().split("&kiba")[0] + "\"\nClick OK to reply.", function(out) {
+                if (out == true) {
+                    document.getElementById("message").click();
+                }
             });
         } else {
             listenStart += 1;
         }
     });
+    onValue(ref(database, `${userDetails.child}/tapToSpeakMessage`), (snapshot) => {
+        if (listenStart == count) {
+            let val = snapshot.val().split("&kiba");
+            if (val[1] == "T2S") {
+                T2S(val[0]);
+                verify("Your child is saying \"" + val[0] + "\"\nClick OK to reply.", function(out) {
+                    if (out == true) {
+                        document.getElementById("message").click();
+                    }
+                })
+            } else {
+                playSound(val[0]);
+                verify("Your child clicked \"" + val[2] + "\"\nClick OK to reply.", function(out) {
+                    if (out == true) {
+                        document.getElementById("message").click();
+                    }
+                })
+            }
+        } else {
+            listenStart += 1;
+        }
+    })
 }
 function startListeningChild() {
-    onValue(ref(database, `${authData.uid}/emergencyReply`), (snapshot) => {
-
+    onValue(ref(database, `${authData.uid}/message`), (snapshot) => {
+        if (childLoad == 1) {
+            notify(snapshot.val().split("&kiba")[0]);
+        } else {
+            childLoad = 1;
+        }
     })
 }

@@ -11,6 +11,9 @@
         <link rel="stylesheet" href="./assets/css/home.css">
         <link rel="stylesheet" href="./assets/css/tapToSpeak.css">
         <link rel="stylesheet" href="./assets/css/typeToSpeak.css">
+        <link rel="stylesheet" href="./assets/css/message.css">
+        <link rel="stylesheet" href="./assets/css/game.css">
+        <link rel="stylesheet" href="./assets/css/mood.css">
         <link rel="icon" type="image/x-icon" href="./assets/img/logo.png">
     </head>
     <body>
@@ -121,13 +124,14 @@
                 <b class="title">Home</b>
             </div>
             <div id="homeDiv">
-                <button id="tapToSpeak" style="background-image: url(./assets/img/tapToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Tap to Speak</b><br>
-                <button id="reminder" style="background-image: url(./assets/img/Reminder.png);" class="homeMenu"></button><br><b class="homeLabel">Reminder</b><br>
-                <button id="games" style="background-image: url(./assets/img/Games.png);" class="homeMenu"></button><br><b class="homeLabel">Games</b><br>
-                <button id="mood" style="background-image: url(./assets/img/mood.png);" class="homeMenu"></button><br><b class="homeLabel">Mood</b><br>
-                <button id="typeToSpeak" style="background-image: url(./assets/img/typeToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Type to Speak</b><br>
-                <button id="emergency" style="background-image: url(./assets/img/emergency.png);" class="homeMenu"></button><br><b class="homeLabel">Emergency</b><br>
-            </div>
+                <div id="d1"><button id="tapToSpeak" style="background-image: url(./assets/img/tapToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Tap to Speak</b><br></div>
+                <div id="d2"><button id="reminder" style="background-image: url(./assets/img/Reminder.png);" class="homeMenu"></button><br><b class="homeLabel">Reminder</b><br></div>
+                <div id="d3"><button id="games" style="background-image: url(./assets/img/Games.png);" class="homeMenu"></button><br><b class="homeLabel">Games</b><br></div>
+                <div id="d4"><button id="mood" style="background-image: url(./assets/img/mood.png);" class="homeMenu"></button><br><b class="homeLabel">Mood</b><br></div>
+                <div id="d5"><button id="typeToSpeak" style="background-image: url(./assets/img/typeToSpeak.png);" class="homeMenu"></button><br><b class="homeLabel">Type to Speak</b><br></div>
+                <div id="d6"><button id="emergency" style="background-image: url(./assets/img/emergency.png);" class="homeMenu"></button><br><b class="homeLabel">Emergency</b><br></div>
+                <div id="d7"><button id="message" style="background-image: url(./assets/img/message.png);" class="homeMenu"></button><br><b class="homeLabel">Message</b><br></div>
+            </div> 
         </div>
 
         <!-- Connect Screen -->
@@ -170,7 +174,7 @@
             <div class="scrnDiv">
                 <form id="tapToSpeakT2SForm">
                     <div id="tapToSpeakT2SImg"></div><br>
-                    <button id="tapToSpeakT2SInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakT2SInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakT2SInpText">Insert Image</a></button><br>
+                    <button type="button" id="tapToSpeakT2SInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakT2SInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakT2SInpText">Insert Image</a></button><br>
                     <input required id="tapToSpeakT2SName" placeholder="Name">
                     <select required id="tapToSpeakT2SCaterogy">
                         <option value="" hidden selected>Category</option>
@@ -190,19 +194,21 @@
                 <b class="title">Tap to Speak</b>
             </div>
             <div class="scrnDiv">
-                <div id="tapToSpeakAudioImg"></div><br>
-                <button id="tapToSpeakAudioInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakAudioInpText">Insert Image</a></button><br>
-                <input id="tapToSpeakAudioName" placeholder="Name">
-                <select id="tapToSpeakAudioCaterogy">
-                    <option value="" hidden selected>Category</option>
-                    <option>Add Category</option></select>
-                <select id="tapToSpeakAudioSelect">
-                    <option>Text to Speech</option>
-                    <option selected>Audio</option>
-                </select><br>
-                <button id="tapToSpeakAudioMessageBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioMessage" type="file" style="display: none;" accept="audio/*"><a id="tapToSpeakAudioMessageText">Upload Audio</a></button><br>
-                <audio id="tapToSpeakAudioPreview" controls></audio>
-                <button id="tapToSpeakAudioBtn" class="buttons">Add</button>
+                <form id="tapToSpeakAudioForm">
+                    <div id="tapToSpeakAudioImg"></div><br>
+                    <button type="button" id="tapToSpeakAudioInpBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioInp" type="file" style="display: none;" accept="image/*"><a id="tapToSpeakAudioInpText">Insert Image</a></button><br>
+                    <input id="tapToSpeakAudioName" placeholder="Name">
+                    <select id="tapToSpeakAudioCaterogy">
+                        <option value="" hidden selected>Category</option>
+                        <option>Add Category</option></select>
+                    <select id="tapToSpeakAudioSelect">
+                        <option>Text to Speech</option>
+                        <option selected>Audio</option>
+                    </select><br>
+                    <button type="button" id="tapToSpeakAudioMessageBtn" onclick="this.firstChild.click();"><input id="tapToSpeakAudioMessage" type="file" style="display: none;" accept="audio/*"><a id="tapToSpeakAudioMessageText">Upload Audio</a></button><br>
+                    <audio id="tapToSpeakAudioPreview" controls></audio>
+                    <button id="tapToSpeakAudioBtn" class="buttons">Add</button>
+                </form>
             </div>
         </div>
         <div id="manageCategory" class="scrn" hidden>
@@ -226,7 +232,11 @@
                 <div class="homeBtn"></div>
                 <b class="title">Games</b>
             </div>
-            <div id="gamesAdd" class="addBtns"></div>
+            <div class="scrnDiv">
+                <div id="g1"><button id="matching" style="background-image: url(./assets/img/matching.jpg);" class="gameMenu"></button><br><b class="gameLabel">Matching</b><br></div>
+                <div id="g2"><button id="jigsaw" style="background-image: url(./assets/img/jigsaw.jpg);" class="gameMenu"></button><br><b class="gameLabel">Jigsaw</b><br></div>
+                <div id="g3"><button id="stack" style="background-image: url(./assets/img/stack.jpg);" class="gameMenu"></button><br><b class="gameLabel">Color Stack</b><br></div>
+            </div>
         </div>
         
         <!-- Mood Screen -->
@@ -235,7 +245,18 @@
                 <div class="homeBtn"></div>
                 <b class="title">Mood</b>
             </div>
-            <div id="moodAdd" class="addBtns"></div>
+            <div id="moodChild" class="moodDiv">
+                <h1 style="width: 100%; text-align: center;">I am feeling:</h1>
+                <button id="veryHappy" style="background-image: url(./assets/img/smile.png);" class="moodMenu"></button><br><b class="moodLabel">Very Happy</b><br>
+                <button id="happy" style="background-image: url(./assets/img/blush.png);" class="moodMenu"></button><br><b class="moodLabel">Happy</b><br>
+                <button id="neutral" style="background-image: url(./assets/img/neutral_face.png);" class="moodMenu"></button><br><b class="moodLabel">Neutral</b><br>
+                <button id="sad" style="background-image: url(./assets/img/cry.png);" class="moodMenu"></button><br><b class="moodLabel">Sad</b><br>
+                <button id="depressed" style="background-image: url(./assets/img/disappointed.png);" class="moodMenu"></button><br><b class="moodLabel">Depressed</b><br>
+            </div>
+            <div id="moodParent" class="moodDiv" hidden>
+                <img width="100%" src="./assets/img/moodData.jpg";><br><br><br>
+                <img width="100%" src="./assets/img/moodData2.png";>
+            </div>
         </div>
 
         <!-- Type to Speak Screen -->
@@ -255,6 +276,18 @@
             <div class="headings">
                 <div class="homeBtn"></div>
                 <b class="title">Emergency</b>
+            </div>
+        </div>
+
+        <!-- Type to Speak Screen -->
+        <div id="messageScrn" class="scrn" hidden>
+            <div class="headings">
+                <div class="homeBtn"></div>
+                <b class="title">Message</b>
+            </div>
+            <div class="scrnDiv">
+                <textarea id="messageText" placeholder="Type the message for the child"></textarea><br>
+                <button id="messageBtn" class="buttons">Message</button>
             </div>
         </div>
     </body>
