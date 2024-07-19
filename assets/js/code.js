@@ -689,6 +689,33 @@ document.getElementById("tapToSpeakAudioMessage").oninput = function() {
     }
 }
 
+//Mood
+document.getElementById("veryHappy").onclick = function() {
+    set(ref(database, `${authData.uid}/mood`), "Very Happy&kiba" + randomNumber(1, 99999)).then(() => {
+        snackbar("Notified the parent");
+    })
+}
+document.getElementById("happy").onclick = function() {
+    set(ref(database, `${authData.uid}/mood`), "Happy&kiba" + randomNumber(1, 99999)).then(() => {
+        snackbar("Notified the parent");
+    })
+}
+document.getElementById("neutral").onclick = function() {
+    set(ref(database, `${authData.uid}/mood`), "Neutral&kiba" + randomNumber(1, 99999)).then(() => {
+        snackbar("Notified the parent");
+    })
+}
+document.getElementById("sad").onclick = function() {
+    set(ref(database, `${authData.uid}/mood`), "Sad&kiba" + randomNumber(1, 99999)).then(() => {
+        snackbar("Notified the parent");
+    })
+}
+document.getElementById("depressed").onclick = function() {
+    set(ref(database, `${authData.uid}/mood`), "Depressed&kiba" + randomNumber(1, 99999)).then(() => {
+        snackbar("Notified the parent");
+    })
+}
+
 // Type to speak
 document.getElementById("typeToSpeakBtn").onclick = function() {
     if (document.getElementById("typeToSpeakText").value.trim() != "") {
@@ -711,9 +738,9 @@ document.getElementById("typeToSpeakText").oninput = function() {
 document.getElementById("messageBtn").onclick = function() {
     this.disabled = true;
     if (document.getElementById("messageText").value.trim() != "") {
-        T2S(document.getElementById("messageText").value);
         set(ref(database, `${userDetails.child}/message`), document.getElementById("messageText").value + "&kiba" + randomNumber(1, 99999)).then(() => {
             snackbar("Message Delivered");
+            this.disabled = false;
         });
     }
 }
@@ -741,10 +768,21 @@ function startListening() {
         }
     });
     onValue(ref(database, `${userDetails.child}/typeToSpeak`), (snapshot) => {
-        console.log(snapshot.val());
         if (listenStart == count) {
             T2S(snapshot.val().split("&kiba")[0]);
             verify("Your child is saying \"" + snapshot.val().split("&kiba")[0] + "\"\nClick OK to reply.", function(out) {
+                if (out == true) {
+                    document.getElementById("message").click();
+                }
+            });
+        } else {
+            listenStart += 1;
+        }
+    });
+    onValue(ref(database, `${userDetails.child}/mood`), (snapshot) => {
+        if (listenStart == count) {
+            T2S(`Your child is feeling ${snapshot.val().split("&kiba")[0]}`);
+            verify(`Your child is feeling ${snapshot.val().split("&kiba")[0]}\nClick OK to reply.`, function(out) {
                 if (out == true) {
                     document.getElementById("message").click();
                 }
@@ -780,6 +818,7 @@ function startListeningChild() {
     onValue(ref(database, `${authData.uid}/message`), (snapshot) => {
         if (childLoad == 1) {
             notify(snapshot.val().split("&kiba")[0]);
+            T2S(document.getElementById("messageText").value);
         } else {
             childLoad = 1;
         }

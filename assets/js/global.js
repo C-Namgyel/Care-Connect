@@ -204,6 +204,6 @@ function T2S(text) {
 var authData; // The data returned from firebase auth
 var userDetails; // The user data stored in the database
 var listenStart = 0; // Will start listening for changes when it reaches the count value
-var count = 3;
+var count = 4;
 var categories;
 var childLoad = 0;
